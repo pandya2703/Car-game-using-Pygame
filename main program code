@@ -1,0 +1,123 @@
+# A car game using pygame
+# import pygame and random
+import pygame
+import random
+import time
+# import class that was made up
+from Car import Car
+pygame.init()
+
+# define some colors
+white = (255,255,255)
+black = (0,0,0)
+green = (0,255,0)
+light_grey = (200,200,200)
+dark = (50,50,50)
+red = (255,0,0)
+
+# open a pygame window
+size = (540,500) # give the window its size
+screen = pygame.display.set_mode(size)
+
+pygame.display.set_caption("Car racing game") # name the window anything you want
+
+# this will be a list that will contain all the sprites we intend to use in our game.
+all_sprites_list = pygame.sprite.Group()
+
+playerCar = Car(red, 20, 30)
+playerCar.rect.x = 200
+playerCar.rect.y = 300
+
+# add this to the list of objects
+all_sprites_list.add(playerCar)
+
+# moving blocks
+def things(thingx, thingy, thingw, thingh, color):
+    pygame.draw.rect(screen, black, [thingx, thingy, thingw, thingh])
+
+thing_startx = random.randrange(0, 540)
+thing_starty = -200
+thing_speed = 17
+thing_widht = 100
+thing_height = 100
+
+
+
+# allowing the user to close the window
+done = False
+clock=pygame.time.Clock()
+
+######### Main program loop########
+
+while done == False:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_x:
+                done = True
+
+    # allowing the user to move the car
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        playerCar.moveLeft(5)
+    if keys[pygame.K_RIGHT]:
+        playerCar.moveRight(5)
+    if keys[pygame.K_DOWN]:
+        playerCar.moveUp(10)
+    if keys[pygame.K_UP]:
+        playerCar.moveDown(10)
+
+
+
+
+
+    # Game logic
+    all_sprites_list.update()
+
+    # make rectangles in the screen
+    screen.fill(white)
+    pygame.draw.rect(screen, light_grey, [220, 2, 100, 498], 0)
+    pygame.draw.rect(screen, green, [0, 2, 100, 498], 0)
+    pygame.draw.rect(screen, light_grey, [110, 2, 100, 498], 0)
+    pygame.draw.rect(screen, light_grey, [330, 2, 100, 498], 0)
+    pygame.draw.rect(screen, green, [440, 2, 100, 498], 0)
+
+
+
+    # if red box hits on either sides
+    if playerCar.rect.x < 110 or playerCar.rect.x > 380:
+        font = pygame.font.Font(None, 100)
+        text = font.render("You Crashed", True, black)
+        screen.blit(text, [100,100])
+        done = True
+
+    # draw all sprites in one go
+    all_sprites_list.draw(screen)
+
+    # boxes in between
+    things(thing_startx, thing_starty, thing_widht, thing_height, black)
+    thing_starty += thing_speed
+
+    if thing_starty > 500:
+        thing_starty = 0 - thing_height
+        thing_startx = random.randrange(100, 400)
+
+    if playerCar.rect.y < thing_starty +  thing_height:
+        print("y crossover")
+
+        if playerCar.rect.x > thing_startx and playerCar.rect.x < thing_startx + thing_widht or playerCar.rect.x+20 > thing_startx and playerCar.rect.x+20 < thing_startx+thing_widht:
+            print("x crossover")
+            font = pygame.font.Font(None, 100)
+            text = font.render("You Crashed", True, black)
+            text = font.render("You Crashed", True, black)
+            screen.blit(text, [100, 100])
+            done = True
+
+
+
+    pygame.display.flip()
+
+    clock.tick(20)
+
+pygame.quit()
