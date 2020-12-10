@@ -1,0 +1,65 @@
+# this is the code for the car in a class 
+
+# import pygame
+import pygame
+
+# define colors
+white = (255,255,255)
+green = (0, 255, 0)
+red = (255,0,0)
+
+# make a class for car
+class Car(pygame.sprite.Sprite):
+    # this class represents a car. It derives from the 'sprite' class in Pygame
+
+    def __init__(self, color, width, height):
+        # Call the parent class (sprite) constructor
+        super().__init__()
+
+        # pass in the color of the car, and it's x and y position, width and height.
+        # set the background color and set it to be transparent
+        self.image = pygame.Surface([50,50])
+        self.image.fill(white)
+        self.image.set_colorkey(white)
+
+        # Initialise attributes of the car.
+        self.width = 50
+        self.height = 70
+        self.color = red
+        self.speed = 10
+
+        # Draw the car (a rectangle!)
+        pygame.draw.rect(self.image, self.color, [0, 0, self.width, self.height])
+
+        # Fetch the rectangle object that has the dimensions of the image.
+        self.rect = self.image.get_rect()
+
+    def moveRight(self, pixels):
+        self.rect.x += pixels
+
+    def moveLeft(self, pixels):
+        self.rect.x -= pixels
+
+    def moveUp(self, pixels):
+        self.rect.y += self.speed * pixels / 20
+
+    def moveDown(self, pixels):
+        self.rect.y -= self.speed * pixels / 20
+
+    def changeSpeed(self, speed):
+        self.speed = speed
+
+    def repaint(self, color):
+        self.color = color
+        pygame.draw.rect(self.image, self.color, [0, 0, self.width, self.height])
+
+        # draw the car
+        pygame.draw.rect(self.image, green, [0,0,50,50])
+
+        # intrested we could load a proper picture of a car...
+        # self.image = pygame.image.load("car.png").convert_alpha()
+
+        # fetch the rectangle object that has the dimensions of the image.
+        self.rect = self.image.get_rect()
+
+#end
