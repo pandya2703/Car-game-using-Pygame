@@ -1,2 +1,2 @@
 # Game-using-pygame
-A basic car game built with pygame and classes in python.
+A car game built with pygame and Object Oriented programming in Python. 
